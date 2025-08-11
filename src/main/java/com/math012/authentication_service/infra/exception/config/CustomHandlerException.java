@@ -2,6 +2,7 @@ package com.math012.authentication_service.infra.exception.config;
 
 import com.math012.authentication_service.infra.exception.EmailAlreadyRegisteredException;
 import com.math012.authentication_service.infra.exception.InvalidFieldsException;
+import com.math012.authentication_service.infra.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,5 +32,11 @@ public class CustomHandlerException extends ResponseEntityExceptionHandler{
     public ResponseEntity<StructException> handlerBadCredentialsException(Exception e, WebRequest request){
         StructException exception = new StructException(new Date(), "Credenciais inválidas", request.getDescription(true));
         return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<StructException> handlerResourceNotFoundException(Exception e, WebRequest request){
+        StructException exception = new StructException(new Date(), e.getMessage(), request.getDescription(true));
+        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 }
